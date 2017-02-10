@@ -1,0 +1,19 @@
+#container {
+  width: 100%;
+  height: 440px;
+}
+
+#container center > div {
+  display: inline-block;
+  vertical-align: middle
+}
+body {
+  padding: 50px;
+  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+}
+.skip {
+  display: none;
+}
+a {
+  color: #00B7FF;
+}
