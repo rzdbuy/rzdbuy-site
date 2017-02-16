@@ -98,6 +98,7 @@ var DrawItem = function (trainObj, index) {
     trainDom.children[1].textContent = s2;
 };
 ProcessTopForMainPage = function () {
+    IsMainPage = true;
     var i = 0;
     for (var route of DataSource1) {
         DrawItem(route.trainInfo, i);
@@ -119,14 +120,16 @@ var ProcessDateStr = function (dateStr) {
         trainDom.className = "skip";
     }
 };
-
+$.when(deferredMainInit, deferredLoadJson).done(function () {
+    var range = CalcRange(DataSource1);
+    calendar.option("min", range.min);
+    calendar.option("max", range.max);
+    ProcessByHashLocation();
+});
 var IsMainPage = false;
 $(function () {
-        Globalize.culture('ru');
         if (location.pathname == "/2017ny/" || location.pathname == "/2016summer/") {
             IsMainPage = true;
-            //CreateHiddenTrains(50);
-            //$("#title")[0].children[0].textContent = "TOP";
         } else {
             calendar = $("#calendar-container").dxCalendar({
                 value: new Date(),
@@ -136,7 +139,6 @@ $(function () {
                 // max: range.max,
                 // min: range.min,
                 onValueChanged: function (data) {
-                    //console.log(data.value);
                     var month = data.value.getMonth() + 1;
                     if (month < 10)
                         month = "0" + month;
@@ -156,6 +158,7 @@ $(function () {
             }
             $("#title")[0].children[0].textContent = RouteName;
             CreateHiddenTrains(50);
+            deferredMainInit.resolve();
         }
         $("#types").dxSelectBox({
             dataSource: types,
